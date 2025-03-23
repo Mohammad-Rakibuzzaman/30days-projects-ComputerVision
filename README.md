@@ -1,1 +1,1 @@
-# Computer-Vision-Store
+# 30 days Project Challange (Computer Vision)
