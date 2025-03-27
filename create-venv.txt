@@ -1,0 +1,21 @@
+2. Create a Virtual Environment
+It's better to create a virtual environment to avoid package conflicts in the global environment. Here's how to do it:
+
+🔹 Create a virtual environment:
+bash
+Copy
+Edit
+python -m venv myenv
+🔹 Activate the virtual environment:
+Windows:
+
+bash
+Copy
+Edit
+myenv\Scripts\activate
+Linux/macOS:
+
+bash
+Copy
+Edit
+source myenv/bin/activate

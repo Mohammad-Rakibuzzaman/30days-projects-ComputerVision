@@ -17,7 +17,7 @@ def imshow(title = "Image", image = None, size = 10):
     plt.title(title)
     plt.show()
 
-image = cv2.imread('./images/hioryyyy.jpg')
+image = cv2.imread('./data/hioryyyy.jpg')
 imshow("hiory_fem", image, size = 7)
 
 #0 is black and 255 is white

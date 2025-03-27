@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 # Let's see what version we're running
 print(cv2.__version__)
 
-image = cv2.imread('./images/GjbRnviasAAmda9.jpg')
+image = cv2.imread('./data/GjbRnviasAAmda9.jpg')
 plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 # plt.imshow(image)
 
