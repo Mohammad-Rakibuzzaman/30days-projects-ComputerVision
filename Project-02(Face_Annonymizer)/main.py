@@ -1,4 +1,8 @@
+# this is for folder structure
 import os
+
+#this library using for video purpose
+import argparse
 
 import cv2
 import mediapipe as mp
@@ -7,10 +11,15 @@ import mediapipe as mp
 ### This function is for video annonymization ###
 
 def process_img(img, face_detection):
+    
+    H, W, _ = img.shape
+    
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     out = face_detection.process(img_rgb)
 
     # print(out.detections)
+
+    
 
     if out.detections is not None:
         for detection in out.detections: 
@@ -31,16 +40,25 @@ def process_img(img, face_detection):
 
     return img
 
+#this is for video purpose#
+args = argparse.ArgumentParser()
+# args.add_argument("--mode", default='image')
+# args.add_argument("--mode", default='video')
+args.add_argument("--mode", default='webcam')
+# args.add_argument("--filePath", default='./data/herh1m.jpg')
+# args.add_argument("--filePath", default='./data/LISA-_MONEY.mp4')
+args.add_argument("--filePath", default=None)
+
+args = args.parse_args()
+
+#this is for video purpose#
+
+
+
 output_dir = './output'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-# read image
-img_path = './data/she.jpg'
-img = cv2.imread(img_path)
-
-
-H, W, _ = img.shape
 
 # detect face
 
@@ -48,12 +66,77 @@ mp_face_detection = mp.solutions.face_detection
 
 with mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5) as face_detection:
     # pass
-    img = process_img(img, face_detection)
+
+    if args.mode in ['image']:
+        # read image
+        
+        img = cv2.imread(args.filePath)
+       
+        img = process_img(img, face_detection)
    
+        # save image
+        cv2.imwrite(os.path.join(output_dir, 'herh1m_output.png'), img)
+
+    # here comes video
+    elif args.mode in ['video']:
+
+        cap = cv2.VideoCapture(args.filePath)
+        ret, frame = cap.read()
+
+
+        output_video = cv2.VideoWriter(os.path.join(output_dir, 'output_video.mp4'), 
+                                       cv2.VideoWriter_fourcc(*'mp4v'), 
+                                       30, 
+                                       (frame.shape[1], frame.shape[0])) #this is height and width of video frame.shap[1] is width and frame.shape[0] is height
+
+
+
+        while ret:
+            img = process_img(frame, face_detection)
+            
+            output_video.write(frame)
+
+            ret, frame = cap.read()
+
+        cap.release()
+
+        output_video.release()
+
+    elif args.mode in ['webcam']:
+        '''
+        Here the total process is
+        1. webcam => cap = cv2.VideoCapture(0)
+        2. reading frame = > ret, frame = cap.read()
+        3. process the frame => frame = process_img(frame, face_detection)
+        4. visualize the frame => cv2.imshow('frame', frame)
+        5. wait for 25ms => cv2.waitKey(25) (read a new frame)
+        6. releasing memory
+
+        '''
+
+
+        cap = cv2.VideoCapture(0)
+        
+        ret, frame = cap.read()
+        
+
+        while ret:
+            frame = process_img(frame, face_detection)
+            
+            cv2.imshow('frame', frame)
+            cv2.waitKey(25)
+
+            ret, frame = cap.read()
+            
+
+
+        cap.release()
+       
+
+
 
 
     # cv2.imshow('img', img)
     # cv2.waitKey(0)
 
-# save image
-cv2.imwrite(os.path.join(output_dir, 'she_output.png'), img)
+
