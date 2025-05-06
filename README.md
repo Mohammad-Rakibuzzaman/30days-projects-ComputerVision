@@ -1,1 +1,1 @@
-# 30 days Project Challange (Computer Vision)
+# Project Challenge (Computer Vision)
